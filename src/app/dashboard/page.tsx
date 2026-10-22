@@ -4,20 +4,23 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
+  const router = useRouter();
   const [analyses, setAnalyses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  if (!user) {
-    window.location.href = "/login";
-    return null;
-  }
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    if (!user) {
+      router.push("/login");
+      return;
+    }
     axios
       .get(`${API}/api/v1/analyses`, {
         headers: { Authorization: `Bearer ${user.access_token}` },
@@ -25,9 +28,10 @@ export default function Dashboard() {
       .then((res) => setAnalyses(res.data || []))
       .catch(() => toast.error("Failed to load history"))
       .finally(() => setLoading(false));
-  }, [user]);
+  }, [user, router]);
 
-  if (loading) return <div className="p-10 text-center">Loading...</div>;
+  if (!mounted) return null;
+  if (!user) return null;
 
   return (
     <div className="p-6">
@@ -36,7 +40,7 @@ export default function Dashboard() {
         <button
           onClick={() => {
             logout();
-            window.location.href = "/";
+            router.push("/");
           }}
           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >

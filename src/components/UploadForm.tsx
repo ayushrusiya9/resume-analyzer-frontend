@@ -3,13 +3,20 @@
 import React, { useState } from "react";
 import Button from "./Button";
 import uploadResume from "@/services/api.service";
-import ResultPage from "@/pages/ResultPage";
+import ResultPage from "./ResultPage";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
+import axios from "axios";
+
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export default function UploadForm() {
     const [errors, setErrors] = useState<any>({});
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [analysisResult, setAnalysisResult] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const { user } = useAuth();
 
     const validate = (formData: FormData) => {
         const newError: any = {};
@@ -53,6 +60,37 @@ export default function UploadForm() {
         setSelectedFile(file || null);
     };
 
+    const saveAnalysis = async (result: any) => {
+        if (!user) return;
+        try {
+            setSaving(true);
+            const formData = {
+                company_name: result.company_name || "",
+                job_title: result.job_title || "",
+                match_score: result.match_score,
+                skills_score: result.skills_score,
+                resume_skills: result.resume_skills || [],
+                missing_skills: result.missing_skills || [],
+                strengths: result.strengths || [],
+                suggestions: result.suggestions || [],
+            };
+            const res = await axios.post(`${API}/api/v1/analyses`, formData, {
+                headers: {
+                    Authorization: `Bearer ${user.access_token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            if (res.data) {
+                toast.success("Analysis saved to your history!");
+            }
+        } catch (err: any) {
+            console.error("Failed to save analysis:", err);
+            toast.error("Failed to save analysis to history.");
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -66,8 +104,11 @@ export default function UploadForm() {
         setIsLoading(true);
 
         uploadResume(formData)
-            .then((data) => {
+            .then(async (data) => {
                 setAnalysisResult(data);
+                if (user) {
+                    await saveAnalysis(data);
+                }
             })
             .catch((error) => {
                 setErrors({ submit: "Upload failed: " + error.message });
@@ -129,12 +170,14 @@ export default function UploadForm() {
                     resume_skills={analysisResult?.resume_skills}
                     missing_skills={analysisResult?.missing_skills}
                     suggestions={analysisResult?.suggestions}
+                    strengths={analysisResult?.strengths}
                 />
             ) : (
 
                 /* FORM */
                 <form
                     onSubmit={handleSubmit}
+                    encType="multipart/form-data"
                     className={`flex flex-col gap-6 ${isLoading ? "pointer-events-none opacity-50" : ""}`}
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -221,8 +264,8 @@ export default function UploadForm() {
 
 
                     {/* BUTTON */}
-                    <Button disabled={isLoading}>
-                        {isLoading ? "Uploading..." : "Upload"}
+                    <Button disabled={isLoading || saving}>
+                        {saving ? "Saving..." : isLoading ? "Uploading..." : "Upload"}
                     </Button>
 
                     {errors.submit && (
