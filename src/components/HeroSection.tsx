@@ -9,7 +9,7 @@ export default function HeroSection() {
 
             {/* center content */}
             <div className="flex-1 flex items-center justify-center">
-                <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl text-center font-semibold bg-linear-to-r from-[#AB8C95] via-[#000000] to-[#8E97C5] bg-clip-text text-transparent py-12">
+                <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl text-center font-semibold bg-linear-to-r from-[#AB8C95] via-[#000000] to-[#8E97C5] bg-clip-text text-transparent dark:from-[#C4B5FD] dark:via-[#818CF8] dark:to-[#6366F1] py-12">
                     Smart Feedback <br />
                     For Your Dream Job
                 </h1>

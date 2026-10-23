@@ -123,9 +123,9 @@ export default function UploadForm() {
 
             {isLoading && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl p-6 flex flex-col items-center shadow-lg">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 flex flex-col items-center shadow-lg">
                         <svg
-                            className="animate-spin h-10 w-10 text-black mb-4"
+                            className="animate-spin h-10 w-10 text-black mb-4 dark:text-white"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -144,7 +144,7 @@ export default function UploadForm() {
                                 d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                             />
                         </svg>
-                        <p className="font-semibold text-gray-800 mb-2">
+                        <p className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
                             Analyzing Resume...
                         </p>
                         <div className="flex justify-center w-full max-w-md mb-2">
@@ -158,7 +158,7 @@ export default function UploadForm() {
                                 </span>
                             </Button>
                         </div>
-                        <p className="text-gray-600">Please wait a few seconds</p>
+                        <p className="text-gray-600 dark:text-gray-400">Please wait a few seconds</p>
                     </div>
                 </div>
             )}
@@ -183,11 +183,11 @@ export default function UploadForm() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Company */}
                         <div>
-                            <label className="text-sm md:text-sm text-gray-600">Company Name</label>
+                            <label className="text-sm md:text-sm text-gray-600 dark:text-gray-400">Company Name</label>
                             <input
                                 name="company_name"
                                 placeholder="eg. Google"
-                                className="bg-white p-2 rounded w-full text-sm md:text-base"
+                                className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 p-2 rounded w-full text-sm md:text-base text-gray-900 dark:text-gray-100"
                             />
                             {errors.company_name && (
                                 <p className="text-red-500 text-sm">{errors.company_name}</p>
@@ -196,11 +196,11 @@ export default function UploadForm() {
 
                         {/* Job Title */}
                         <div>
-                            <label className="text-sm md:text-sm text-gray-600">Job Title</label>
+                            <label className="text-sm md:text-sm text-gray-600 dark:text-gray-400">Job Title</label>
                             <input
                                 name="job_title"
                                 placeholder="eg. Software Engineer"
-                                className="bg-white p-2 rounded w-full text-sm md:text-base"
+                                className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 p-2 rounded w-full text-sm md:text-base text-gray-900 dark:text-gray-100"
                             />
                             {errors.job_title && (
                                 <p className="text-red-500 text-sm">{errors.job_title}</p>
@@ -210,11 +210,11 @@ export default function UploadForm() {
 
                     {/* Description */}
                     <div>
-                        <label className="text-sm text-gray-600">Job Description</label>
+                        <label className="text-sm text-gray-600 dark:text-gray-400">Job Description</label>
                         <textarea
                             name="job_description"
                             placeholder="eg. We are looking for a skilled software engineer..."
-                            className="bg-white p-2 rounded w-full h-28 md:h-32 text-sm md:text-base"
+                            className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 p-2 rounded w-full h-28 md:h-32 text-sm md:text-base text-gray-900 dark:text-gray-100"
                         />
                         {errors.job_description && (
                             <p className="text-red-500 text-sm">{errors.job_description}</p>
@@ -224,21 +224,21 @@ export default function UploadForm() {
                     {/* Upload */}
                     <div className="flex flex-col gap-2">
 
-                    <label className="text-sm text-gray-600">
+                    <label className="text-sm text-gray-600 dark:text-gray-400">
                         Upload Resume
                     </label>
 
                     <label
                         htmlFor="resume_file"
-                        className="flex flex-col items-center justify-center w-full h-40 md:h-52 px-4 md:px-6 bg-gray-100 rounded-2xl border-2 border-gray-200 cursor-pointer hover:bg-gray-50 hover:border-gray-300 transition-all duration-200"
+                        className="flex flex-col items-center justify-center w-full h-40 md:h-52 px-4 md:px-6 bg-gray-100 dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-200"
                     >
 
                         <div className="text-3xl mb-3">⬆️</div>
 
-                        <p className="text-gray-700 font-medium">
-                            Click to upload <span className="text-gray-500 font-normal">or drag and drop</span>
+                        <p className="text-gray-700 dark:text-gray-300 font-medium">
+                            Click to upload <span className="text-gray-500 dark:text-gray-400 font-normal">or drag and drop</span>
                         </p>
-                        <p className="text-sm text-gray-400 mt-1 text-center">
+                        <p className="text-sm text-gray-400 dark:text-gray-500 mt-1 text-center">
                             PDF, DOC or DOCX (max. 5MB)
                         </p>
 

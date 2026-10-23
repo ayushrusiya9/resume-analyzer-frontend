@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -28,10 +29,13 @@ export default function RootLayout({
     <html
       lang="en"
       className={` h-full antialiased`}
-    > 
+      suppressHydrationWarning
+    >
       <body className="min-h-full flex flex-col {inter.className}">
-        <AuthProvider>{children}</AuthProvider>
-        <Toaster position="top-right" richColors />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AuthProvider>{children}</AuthProvider>
+          <Toaster position="top-right" richColors />
+        </ThemeProvider>
       </body>
     </html>     
   );
