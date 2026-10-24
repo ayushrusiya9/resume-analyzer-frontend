@@ -213,5 +213,3 @@ const ResultPage: React.FC<ResultPageProps> = ({
 };
 
 export default ResultPage;
-
-export default ResultPage;
