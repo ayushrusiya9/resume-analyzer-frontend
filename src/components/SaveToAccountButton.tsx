@@ -27,22 +27,22 @@ export function SaveToAccountButton({ analysis }: SaveToAccountButtonProps) {
   };
 
   return (
-    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-      <h3 className="text-sm font-semibold text-blue-900 mb-2">Save this analysis?</h3>
-      <p className="text-xs text-blue-700 mb-3">
+    <div className="mt-6 p-4 bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200/80 dark:border-indigo-900/60 rounded-xl transition-colors">
+      <h3 className="text-sm font-bold text-indigo-950 dark:text-indigo-200 mb-1">Save this analysis?</h3>
+      <p className="text-xs text-indigo-700 dark:text-indigo-400 mb-3">
         Create a free account to view your analysis history anytime.
       </p>
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2.5">
         <button
           onClick={handleSave}
           disabled={isLoading}
-          className="flex-1 px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-60"
+          className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-xs disabled:opacity-60 cursor-pointer"
         >
           {isLoading ? "Loading..." : "Sign up to save"}
         </button>
         <button
           onClick={() => router.push("/login")}
-          className="flex-1 px-4 py-2 bg-white text-blue-600 border border-blue-200 rounded text-sm font-medium hover:bg-blue-50 disabled:opacity-60"
+          className="flex-1 px-4 py-2 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-slate-700 rounded-lg text-sm font-semibold hover:bg-indigo-50 dark:hover:bg-slate-700 transition-colors shadow-xs disabled:opacity-60 cursor-pointer"
           disabled={isLoading}
         >
           Already have an account?

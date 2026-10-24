@@ -12,11 +12,10 @@ interface ResultPageProps {
 
 // Score color
 function getScoreColor(score: number) {
-    if (score >= 70) return "text-green-600";
-    if (score >= 40) return "text-yellow-500";
-    return "text-red-500";
+    if (score >= 70) return "text-emerald-600 dark:text-emerald-400";
+    if (score >= 40) return "text-amber-500 dark:text-amber-400";
+    return "text-rose-600 dark:text-rose-400";
 }
-
 
 const ResultPage: React.FC<ResultPageProps> = ({
     match_score = 88,
@@ -28,14 +27,11 @@ const ResultPage: React.FC<ResultPageProps> = ({
     ],
     strengths = [],
 }) => {
-
     const { user } = useAuth();
 
     // SVG circle logic based on issues
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
-    // If no issues, circle is full; if many issues, circle is low
-    // Assume 10+ issues = empty, 0 = full, interpolate in between
     const maxIssues = 10;
     const issues = missing_skills.length;
     const fillPercent = issues >= maxIssues ? 0 : 1 - issues / maxIssues;
@@ -43,16 +39,11 @@ const ResultPage: React.FC<ResultPageProps> = ({
     const strokeDashoffset = circumference - progress;
     const gradId = React.useId();
 
-    // dynamic gradient colors based on score
-    const startColor = match_score >= 70 ? "#34D399" : match_score >= 40 ? "#FBBF24" : "#EF4444";
-    const endColor = "#6B7280";
-
+    // Dynamic gradient colors based on score
+    const startColor = match_score >= 70 ? "#10B981" : match_score >= 40 ? "#F59E0B" : "#F43F5E";
+    const endColor = match_score >= 70 ? "#059669" : match_score >= 40 ? "#D97706" : "#E11D48";
 
     // Dynamic breakdown logic
-    // Skills: match_score
-    // Content: number of resume_skills (out of 10)
-    // Structure: placeholder (always 70)
-    // Tone & Style: placeholder (always 55)
     const contentScore = Math.min(Math.round((resume_skills.length / 10) * 100), 100);
     const skillsTag = match_score >= 70 ? "Strong" : match_score >= 40 ? "Average" : "Weak";
     const contentTag = contentScore >= 70 ? "Strong" : contentScore >= 40 ? "Average" : "Needs Work";
@@ -66,22 +57,25 @@ const ResultPage: React.FC<ResultPageProps> = ({
     ];
 
     return (
-        <section className="min-h-screen flex justify-center items-start md:items-center p-4 bg-gray-50">
-            <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6 md:p-10">
+        <section className="min-h-screen w-full flex justify-center items-start md:items-center p-4 sm:p-6 transition-colors">
+            <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-gray-200/80 dark:border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 transition-colors">
 
                 {/* TITLE */}
-                <h2 className="text-2xl font-bold mb-6">Resume Review</h2>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-6">
+                    Resume Review
+                </h2>
 
-                <div className="flex flex-col md:flex-row gap-8">
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
 
                     {/* SCORE CIRCLE */}
-                    <div className="flex flex-col items-center justify-center relative w-28 sm:w-32 md:w-40 lg:w-44">
+                    <div className="flex flex-col items-center justify-center relative w-36 sm:w-40 md:w-44 shrink-0">
                         <svg viewBox="0 0 140 140" className="w-full h-auto" role="img" aria-label={`Resume score ${match_score}`}>
                             <circle
                                 cx="70"
                                 cy="70"
                                 r={radius}
-                                stroke="#eee"
+                                stroke="currentColor"
+                                className="text-gray-100 dark:text-slate-800"
                                 strokeWidth="12"
                                 fill="none"
                             />
@@ -100,7 +94,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
                             />
 
                             <defs>
-                                <linearGradient id={gradId}>
+                                <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
                                     <stop offset="0%" stopColor={startColor} />
                                     <stop offset="100%" stopColor={endColor} />
                                 </linearGradient>
@@ -109,36 +103,46 @@ const ResultPage: React.FC<ResultPageProps> = ({
 
                         {/* CENTER TEXT */}
                         <div className="absolute text-center inset-0 flex flex-col items-center justify-center px-2">
-                            <p className={`text-lg sm:text-xl md:text-2xl font-bold ${getScoreColor(match_score)}`}>
+                            <p className={`text-2xl sm:text-3xl font-extrabold ${getScoreColor(match_score)}`}>
                                 {match_score}
                             </p>
-                            <p className="text-xs sm:text-sm text-gray-500">
+                            <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">
                                 {missing_skills.length} issue{missing_skills.length !== 1 ? "s" : ""}
                             </p>
                         </div>
                     </div>
 
                     {/* DETAILS */}
-                    <div className="flex-1">
-                        <h3 className="text-lg font-semibold mb-2">
+                    <div className="flex-1 w-full">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                             Your Resume Score
                         </h3>
-                        <p className="text-sm text-gray-500 mb-4">
-                            Breakdown of your resume quality.
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                            Breakdown of your resume quality and ATS readiness.
                         </p>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                             {breakdown.map((item) => (
                                 <div
                                     key={item.label}
-                                    className="flex justify-between items-center border-b pb-2 pr-2"
+                                    className="flex justify-between items-center border-b border-gray-100 dark:border-slate-800 pb-2.5 pr-2"
                                 >
-                                    <span className="font-medium text-sm md:text-base">
+                                    <span className="font-medium text-sm md:text-base text-gray-700 dark:text-gray-300">
                                         {item.label}
                                     </span>
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-semibold text-sm md:text-base">{item.value}/100</span>
-                                        <span className={`text-xs px-2 py-0.5 rounded-full ${item.color === "green" ? "bg-green-100 text-green-700" : item.color === "yellow" ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}>
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="font-semibold text-sm md:text-base text-gray-900 dark:text-white">
+                                            {item.value}/100
+                                        </span>
+                                        <span
+                                            className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
+                                                item.color === "green"
+                                                    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60"
+                                                    : item.color === "yellow"
+                                                    ? "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60"
+                                                    : "bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60"
+                                            }`}
+                                        >
                                             {item.tag}
                                         </span>
                                     </div>
@@ -149,39 +153,43 @@ const ResultPage: React.FC<ResultPageProps> = ({
                 </div>
 
                 {/* SKILLS */}
-                <div className="mt-8">
-                    <h4 className="font-semibold mb-2">Skills Found</h4>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {resume_skills.map((skill) => (
-                            <span
-                                key={skill}
-                                className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs md:text-sm"
-                            >
-                                {skill}
-                            </span>
-                        ))}
-                    </div>
-
-                    <h4 className="font-semibold mb-2">Missing Skills</h4>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {missing_skills.length > 0 ? (
-                            missing_skills.map((skill) => (
+                <div className="mt-8 pt-6 border-t border-gray-100 dark:border-slate-800">
+                    <h4 className="font-bold text-gray-900 dark:text-white mb-2.5">Skills Found</h4>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {resume_skills.length > 0 ? (
+                            resume_skills.map((skill) => (
                                 <span
                                     key={skill}
-                                    className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs md:text-sm"
+                                    className="bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/60 px-3 py-1 rounded-full text-xs md:text-sm font-medium"
                                 >
                                     {skill}
                                 </span>
                             ))
                         ) : (
-                            <span className="text-green-600 text-sm">
-                                No missing skills
+                            <span className="text-gray-400 text-sm">No specific skills extracted</span>
+                        )}
+                    </div>
+
+                    <h4 className="font-bold text-gray-900 dark:text-white mb-2.5">Missing Skills</h4>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {missing_skills.length > 0 ? (
+                            missing_skills.map((skill) => (
+                                <span
+                                    key={skill}
+                                    className="bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 px-3 py-1 rounded-full text-xs md:text-sm font-medium"
+                                >
+                                    {skill}
+                                </span>
+                            ))
+                        ) : (
+                            <span className="text-emerald-600 dark:text-emerald-400 text-sm font-medium">
+                                No missing skills! Great job.
                             </span>
                         )}
                     </div>
 
-                    <h4 className="font-semibold mb-2">Suggestions</h4>
-                    <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-6">
+                    <h4 className="font-bold text-gray-900 dark:text-white mb-2.5">Suggestions</h4>
+                    <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 space-y-1.5 mb-6">
                         {suggestions.map((s, i) => (
                             <li key={i}>{s}</li>
                         ))}
@@ -203,5 +211,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
         </section>
     );
 };
+
+export default ResultPage;
 
 export default ResultPage;

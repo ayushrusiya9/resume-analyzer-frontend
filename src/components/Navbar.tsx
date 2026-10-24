@@ -1,7 +1,6 @@
-"use client"
+"use client";
 
-import Button from "./Button"
-import { ThemeToggle } from "./ThemeToggle"
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function Navbar() {
     const scrollToUpload = () => {
@@ -10,19 +9,19 @@ export default function Navbar() {
             element.scrollIntoView({ behavior: 'smooth' });
         }
     };
+
     return (
         <nav className="w-full">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between bg-white dark:bg-gray-900 rounded-full shadow-2xl px-4 py-3 sm:px-6 sm:py-4 mt-4">
-                <h1 className="lg:text-3xl md:text-2xl sm:text-xl text-lg font-bold bg-linear-to-r from-[#AB8C95] via-[#000000] to-[#8E97C5] bg-clip-text text-transparent dark:from-[#C4B5FD] dark:via-[#818CF8] dark:to-[#6366F1]">
+            <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between bg-white/85 dark:bg-slate-900/85 backdrop-blur-md rounded-full shadow-lg border border-gray-200/70 dark:border-slate-800 transition-colors mt-2">
+                <h1 className="lg:text-3xl md:text-2xl sm:text-xl text-lg font-extrabold tracking-wide bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-800 dark:from-white dark:via-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">
                     ANALYZE
                 </h1>
-                {/* right side button */}
+                {/* right side toggle */}
                 <div className="flex items-center gap-4">
                     <ThemeToggle />
-                    <div onClick={scrollToUpload} className="cursor-pointer">
-                    </div>
+                    <div onClick={scrollToUpload} className="cursor-pointer" />
                 </div>
             </div>
         </nav>
-    )
+    );
 }
